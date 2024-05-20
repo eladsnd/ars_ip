@@ -18,7 +18,7 @@ def add_noise(image, noise_type="gaussian"):
     if noise_type == "gaussian":
         row, col = image.shape
         mean = 0
-        var = 0.1
+        var = 30
         sigma = var ** 0.5
         gauss = np.random.normal(mean, sigma, (row, col))
         noisy = image + gauss
@@ -72,7 +72,7 @@ def ssim(original, filtered):
     return ssim_map.mean()
 
 
-def display_results(original, noisy, avg_filtered, median_filtered):
+def display_results(original, noisy, avg_filtered, median_filtered, noise_type):
     psnr_avg = psnr(original, avg_filtered)
     ssim_avg = ssim(original, avg_filtered)
     psnr_median = psnr(original, median_filtered)
@@ -87,7 +87,7 @@ def display_results(original, noisy, avg_filtered, median_filtered):
 
     plt.subplot(2, 2, 2)
     plt.imshow(noisy, cmap='gray')
-    plt.title('Noisy Image')
+    plt.title(f'Noisy Image ({noise_type})')
     plt.axis('off')
 
     plt.subplot(2, 2, 3)
@@ -109,24 +109,19 @@ def noise_reduction_workflow(image_path):
     if image is None:
         return
 
-    # הוספת רעש
+    # הוספת רעש גאוסי וסינון
     noisy_gaussian = add_noise(image, "gaussian")
-    noisy_sp = add_noise(image, "salt_and_pepper")
-
-    # סינון רעש עם מסנן ממוצע ומסנן חציון
     avg_filtered_gaussian = average_filter(noisy_gaussian)
     median_filtered_gaussian = median_filter(noisy_gaussian)
+    print("Gaussian Noise")
+    display_results(image, noisy_gaussian, avg_filtered_gaussian, median_filtered_gaussian, "Gaussian")
 
+    # הוספת רעש מלח ופלפל וסינון
+    noisy_sp = add_noise(image, "salt_and_pepper")
     avg_filtered_sp = average_filter(noisy_sp)
     median_filtered_sp = median_filter(noisy_sp)
-
-    # הצגת תוצאות סינון רעש עם רעש גאוסי
-    print("Gaussian Noise")
-    display_results(image, noisy_gaussian, avg_filtered_gaussian, median_filtered_gaussian)
-
-    # הצגת תוצאות סינון רעש עם רעש מלח ופלפל
     print("Salt and Pepper Noise")
-    display_results(image, noisy_sp, avg_filtered_sp, median_filtered_sp)
+    display_results(image, noisy_sp, avg_filtered_sp, median_filtered_sp, "Salt and Pepper")
 
 
 # דוגמה לשימוש בפונקציה הראשית
