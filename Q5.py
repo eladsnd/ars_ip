@@ -30,8 +30,8 @@ def rotate_image(image, angle):
     return rotated
 
 
-def display_results(original, resized, rotated):
-    plt.figure(figsize=(15, 10))
+def display_results(original, resized, rotated, scale_percent, angle):
+    plt.figure(figsize=(18, 6))
 
     plt.subplot(1, 3, 1)
     plt.imshow(cv2.cvtColor(original, cv2.COLOR_BGR2RGB))
@@ -39,13 +39,15 @@ def display_results(original, resized, rotated):
     plt.axis('off')
 
     plt.subplot(1, 3, 2)
+    resized_height, resized_width = resized.shape[:2]
     plt.imshow(cv2.cvtColor(resized, cv2.COLOR_BGR2RGB))
-    plt.title('Resized Image')
+    plt.title(f'Resized Image\nScale: {scale_percent}%\nSize: {resized_width}x{resized_height}')
     plt.axis('off')
 
     plt.subplot(1, 3, 3)
+    rotated_height, rotated_width = rotated.shape[:2]
     plt.imshow(cv2.cvtColor(rotated, cv2.COLOR_BGR2RGB))
-    plt.title('Rotated Image')
+    plt.title(f'Rotated Image\nAngle: {angle}°\nSize: {rotated_width}x{rotated_height}')
     plt.axis('off')
 
     plt.show()
@@ -64,7 +66,7 @@ def scale_and_rotate_workflow(image_path, scale_percent, angle):
     rotated_image = rotate_image(image, angle)
 
     # הצגת התוצאות
-    display_results(image, resized_image, rotated_image)
+    display_results(image, resized_image, rotated_image, scale_percent, angle)
 
 
 if __name__ == '__main__':
