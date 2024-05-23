@@ -7,3 +7,4 @@ def GaussianBlur(R, G, B, kernel_size, sigma):
     B_blur = cv2.GaussianBlur(B, kernel_size, sigma)
 
     return R_blur, G_blur, B_blur
+
